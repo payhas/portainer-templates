@@ -1,0 +1,60 @@
+version: "3.3"
+
+services:
+  app:
+    image: ${REGISTRY}/billing/app:${TAG}
+    deploy:
+      mode: replicated
+      replicas: 3
+    ports:
+      - "5000:80"
+    configs:
+      - source: billing_app_appsettings
+        target: /usr/share/nginx/html/assets/settings/appsettings.json
+
+  api:
+    image: ${REGISTRY}/billing/api:${TAG}
+    deploy:
+      mode: replicated
+      replicas: 1
+    ports:
+      - "5010:80"
+    environment:
+      - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__Default=${CS_DEFAULT}
+      - Serilog__WriteTo__1__Args__serverUrl=${SEQ_URL}
+      - Serilog__MinimumLevel__Default=Information
+      - Redis__Configuration=${REDIS_URL}
+      - RabbitMQ__Connections__Default__HostName=${RABBITMQ_URL}
+      - RabbitMQ__Connections__Default__UserName=${RABBITMQ_USER}
+      - RabbitMQ__Connections__Default__Password=${RABBITMQ_PASS}
+      - Eventing__RabbitMq__HostName=${RABBITMQ_URL}
+      - Eventing__RabbitMq__UserName=${RABBITMQ_USER}
+      - Eventing__RabbitMq__Password=${RABBITMQ_PASS}
+      - Minio__Endpoint=${MINIO_URL}
+      - Minio__AccessKey=${MINIO_AK}
+      - Minio__SecretKey=${MINIO_SK}
+      - APP__SelfUrl=${API_URL}
+      - APP__ClientUrl=${APP_URL}
+      - APP__CorsOrigins=${APP_URL}
+      - APP__RedirectAllowedUrls=${APP_URL}
+      - AuthServer__Authority=${API_URL}
+      - TZ=Asia/Ashgabat
+      - Settings__Abp.Timing.Timezone=West Asia Standard Time
+      - Hangfire__ServerOptions__WorkerCount=64
+      - OTEL_EXPORTER_OTLP_ENDPOINT
+
+  db-migrator:
+    image: ${REGISTRY}/billing/db-migrator:${TAG}
+    environment:
+      - ConnectionStrings__Default=${CS_DEFAULT}
+      - OpenIddict__Applications__Billing_App__RootUrl=${APP_URL}
+      - OpenIddict__Applications__Billing_Swagger__RootUrl=${API_URL}
+      - Serilog__WriteTo__2__Args__serverUrl=${SEQ_URL}
+      - TZ=Asia/Ashgabat
+      - Settings__Abp.Timing.Timezone=West Asia Standard Time
+    restart: on-failure
+
+configs:
+  billing_app_appsettings:
+    external: true

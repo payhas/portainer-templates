@@ -1,0 +1,79 @@
+{
+  "$schema": "./schema.json",
+  "version": "3",
+  "templates": [
+    {
+      "id": 1,
+      "type": 2,
+      "name": "billing-main",
+      "title": "Milli Billing",
+      "description": "Milli Billing (MAIN)",
+      "note": "before deploying this stack, <b>make sure to add the <code>billing_app_appsettings</code> config.</b>",
+      "categories": ["Billing"],
+      "platform": "linux",
+      "repository": {
+        "url": "https://github.com/payhas/portainer-templates",
+        "stackfile": "billing/main/stack/docker-compose.yml"
+      },
+      "env": [
+        {
+          "name": "REGISTRY",
+          "label": "Container registry to pull images from",
+          "default": "registry.payhas.com"
+        },
+        {
+          "name": "TAG",
+          "label": "Version tag of the images to pull"
+        },
+        {
+          "name": "APP_URL",
+          "label": "Url of the Application"
+        },
+        {
+          "name": "API_URL",
+          "label": "Url of the API"
+        },
+        {
+          "name": "CS_DEFAULT",
+          "label": "Database connetion string"
+        },
+        {
+          "name": "MINIO_URL",
+          "label": "Url of the MinIO Server"
+        },
+        {
+          "name": "MINIO_AK",
+          "label": "MinIO Access Key"
+        },
+        {
+          "name": "MINIO_SK",
+          "label": "MinIO Secret Key"
+        },
+        {
+          "name": "REDIS_URL",
+          "label": "Url of the Redis Server"
+        },
+        {
+          "name": "RABBITMQ_URL",
+          "label": "Url of the RabbitMQ Server"
+        },
+        {
+          "name": "RABBITMQ_USER",
+          "label": "RabbitMQ User"
+        },
+        {
+          "name": "RABBITMQ_PASS",
+          "label": "RabbitMQ Password"
+        },
+        {
+          "name": "SEQ_URL",
+          "label": "Url of the Seq Server"
+        },
+        {
+          "name": "OTEL_EXPORTER_OTLP_ENDPOINT",
+          "label": "Url of the OpenTelemetry Exporter"
+        }
+      ]
+    }
+  ]
+}
