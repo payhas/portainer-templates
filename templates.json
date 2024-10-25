@@ -19,7 +19,7 @@
         {
           "name": "REGISTRY",
           "label": "Container registry to pull images from",
-          "default": "registry.payhas.com"
+          "default": "registry.payhas.com/docker"
         },
         {
           "name": "TAG",
@@ -72,6 +72,30 @@
         {
           "name": "OTEL_EXPORTER_OTLP_ENDPOINT",
           "label": "Url of the OpenTelemetry Exporter"
+        }
+      ]
+    },
+    {
+      "id": 101,
+      "type": 1,
+      "name": "seq",
+      "title": "Seq",
+      "description": "Seq Logging Server",
+      "logo": "https://raw.githubusercontent.com/datalust/seqcli/refs/heads/dev/asset/SeqCli.ico",
+      "categories": ["Logging"],
+      "platform": "linux",
+      "image": "datalust/seq",
+      "ports": ["80/tcp"],
+      "volumes": [
+        {
+          "container": "/data"
+        }
+      ],
+      "env": [
+        {
+          "name": "ACCEPT_EULA",
+          "default": "Y",
+          "preset": true
         }
       ]
     }
